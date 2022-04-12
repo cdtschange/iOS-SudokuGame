@@ -23,6 +23,20 @@ class SudokuTests: XCTestCase {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
+    
+    func test9x9CreateGame() {
+        let data = Sudoku9x9Cell.create()
+        assert(data.count == 81)
+        let valid = Sudoku9x9Cell.validate(data: data)
+        assert(valid)
+    }
+    
+    func test6x6CreateGame() {
+        let data = Sudoku6x6Cell.create()
+        assert(data.count == 36)
+        let valid = Sudoku6x6Cell.validate(data: data)
+        assert(valid)
+    }
 
     func testPerformanceExample() throws {
         // This is an example of a performance test case.

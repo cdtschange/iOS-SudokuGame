@@ -10,37 +10,28 @@ import Foundation
 
 struct DigitalCell: Identifiable, Equatable, Hashable {
     var id: Int
-    var originalValue: Int
-    var inputValue: Int?
-    var isFixedValue: Bool
-    var isDraft: Bool = false
+    var value: Int?
+    var isOriginal: Bool
+    var isDraft: Bool {
+        !drafts.isEmpty
+    }
+    var drafts: Set<Int> = Set() 
     var isConflicted: Bool = false
     var isSelected: Bool = false
-    var cellCount: Int
-    var type: SudokuGame.GridType
-    var relateCellIndex: [Int] {
-        switch type {
-        case .nineNine:
-            return Array(0..<cellCount).filter { ($0.row9 == id.row9 || $0.col9 == id.col9 || $0.group9 == id.group9) && $0 != id }
-        case .sixSix:
-            return Array(0..<cellCount).filter { ($0.row6 == id.row6 || $0.col6 == id.col6 || $0.group6 == id.group6) && $0 != id }
-        }
-    }
+    var isRelated: Bool = false
+    var isSameValue: Bool = false
     
     var isCorrect: Bool {
-        return inputValue != nil && isConflicted == false
+        return isOriginal || value != nil && isConflicted == false && isDraft == false
     }
     var displayValue: String {
-        return inputValue == nil ? "" : "\(inputValue!)"
+        return value == nil ? "" : "\(value!)"
     }
     
-    init(model: SudokuCell, originalValue: Int) {
+    init(model: SudokuCell, isOriginal: Bool) {
         self.id = model.index
-        self.type = model.type
-        self.inputValue = model.value
-        self.cellCount = model.cellCount
-        self.originalValue = originalValue
-        self.isFixedValue = model.value != nil
+        self.value = model.value
+        self.isOriginal = isOriginal
     }
     
     static func == (lhs: DigitalCell, rhs: DigitalCell) -> Bool {

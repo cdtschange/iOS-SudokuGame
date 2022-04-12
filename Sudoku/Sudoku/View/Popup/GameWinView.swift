@@ -9,10 +9,10 @@
 import SwiftUI
 
 struct GameWinView: View {
-    @Binding var level: Int
-    @Binding var time: Double
-    @Binding var bestTime: Int?
-    @Binding var newRecord: Bool
+    let level: SudokuGame.Level
+    let time: Int
+    let bestTime: Int?
+    let newRecord: Bool
     
     var body: some View {
         VStack {
@@ -20,7 +20,14 @@ struct GameWinView: View {
                 .font(.title)
                 .fontWeight(.bold)
                 .foregroundColor(.white)
-                .padding(.vertical)
+                .padding(.top)
+            if newRecord {
+                Text("You set a new record 🎉🎉🎉")
+                    .font(.body)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .padding(.vertical)
+            }
             ZStack {
                 Image("star")
                     .resizable()
@@ -30,13 +37,6 @@ struct GameWinView: View {
                     .strokeBorder(Color.white,lineWidth: 3)
             }
                 .frame(width: nil, height: 100)
-                .padding(20)
-            Text("You set a new record 🎉🎉🎉")
-                .font(.body)
-                .fontWeight(.bold)
-                .foregroundColor(.white)
-                .padding(.vertical)
-                .opacity(newRecord ? 1 : 0)
             Spacer()
             VStack(spacing: 8) {
                 HStack {
@@ -51,7 +51,7 @@ struct GameWinView: View {
                         .font(.body)
                         .foregroundColor(.white)
                     Spacer()
-                    Text(SudokuGame.Level(rawValue: level)!.displayName)
+                    Text(level.displayName)
                         .font(.body)
                         .foregroundColor(.white)
                 }
@@ -71,7 +71,7 @@ struct GameWinView: View {
                         .font(.body)
                         .foregroundColor(.white)
                     Spacer()
-                    Text(Int(time).timeDisplay)
+                    Text(time.recordTime)
                         .font(.body)
                         .foregroundColor(.white)
                 }
@@ -91,7 +91,7 @@ struct GameWinView: View {
                         .font(.body)
                         .foregroundColor(.white)
                     Spacer()
-                    Text(bestTime?.timeDisplay ?? "No record")
+                    Text((bestTime ?? 0).recordTime)
                         .font(.body)
                         .foregroundColor(.white)
                 }
@@ -107,11 +107,11 @@ struct GameWinView: View {
 }
 
 struct GameWinView_Previews: PreviewProvider {
-    @State static var level = SudokuGame.Level.easy.rawValue
-    @State static var time = 80.0
-    @State static var bestTime: Int? = 80
-    @State static var newRecord = true
+    static let time = 80
+    static let bestTime: Int? = nil
+    static let newRecord = true
     static var previews: some View {
-        GameWinView(level: $level, time: $time, bestTime: $bestTime, newRecord: $newRecord).background(Color(hex: "3d5a80"))
+        GameWinView(level: .easy, time: time, bestTime: bestTime, newRecord: newRecord).background(Color(hex: "3d5a80"))
+            .frame(height: 300)
     }
 }

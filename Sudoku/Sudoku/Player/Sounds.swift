@@ -38,4 +38,7 @@ class Sounds {
     func resume() {
         audioPlayer?.play()
     }
+    func stop() {
+        audioPlayer?.stop()
+    }
 }

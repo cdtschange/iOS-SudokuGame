@@ -9,46 +9,22 @@
 import SwiftUI
 
 struct RecordView: View {
-    @Binding var type: Int
-    @Binding var bestRecordEasy9: Int?
-    @Binding var bestRecordNormal9: Int?
-    @Binding var bestRecordHard9: Int?
-    @Binding var bestRecordEasy6: Int?
-    @Binding var bestRecordNormal6: Int?
-    @Binding var bestRecordHard6: Int?
+    let type: SudokuGame.GridType
+    let bestRecordEasy: Int?
+    let bestRecordNormal: Int?
+    let bestRecordHard: Int?
     
     var easyRecord: String {
-        let gridType = SudokuGame.GridType(rawValue: type)!
-        var time = 0
-        switch gridType {
-        case .nineNine:
-            time = bestRecordEasy9 ?? 0
-        case .sixSix:
-            time = bestRecordEasy6 ?? 0
-        }
-        return time.timeDisplay
+        let time = bestRecordEasy ?? 0
+        return time.recordTime
     }
     var normalRecord: String {
-        let gridType = SudokuGame.GridType(rawValue: type)!
-        var time = 0
-        switch gridType {
-        case .nineNine:
-            time = bestRecordNormal9 ?? 0
-        case .sixSix:
-            time = bestRecordNormal6 ?? 0
-        }
-        return time.timeDisplay
+        let time = bestRecordNormal ?? 0
+        return time.recordTime
     }
     var hardRecord: String {
-        let gridType = SudokuGame.GridType(rawValue: type)!
-        var time = 0
-        switch gridType {
-        case .nineNine:
-            time = bestRecordHard9 ?? 0
-        case .sixSix:
-            time = bestRecordHard6 ?? 0
-        }
-        return time.timeDisplay
+        let time = bestRecordHard ?? 0
+        return time.recordTime
     }
     
     var types = SudokuGame.GridType.allCases
@@ -59,7 +35,13 @@ struct RecordView: View {
                 .font(.title)
                 .fontWeight(.bold)
                 .foregroundColor(.white)
-                .padding(.vertical)
+                .padding(.top)
+            Text(type.displayName)
+                .font(.title)
+                .fontWeight(.bold)
+                .foregroundColor(.white)
+                .padding(.bottom)
+            Spacer()
             ZStack {
                 Image("best")
                     .resizable()
@@ -74,12 +56,6 @@ struct RecordView: View {
                 .padding(10)
             Spacer()
             VStack(spacing: 8) {
-                Picker("Game Type", selection: $type) {
-                    ForEach(0 ..< self.types.count) { index in
-                        Text(self.types[index].displayName).tag(index)
-                    }
-                    }.pickerStyle(SegmentedPickerStyle())
-                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
                 HStack {
                     Text("Easy")
                         .font(.body)
@@ -127,14 +103,10 @@ struct RecordView: View {
 }
 
 struct RecordView_Previews: PreviewProvider {
-    @State static var type = 1
-    @State static var bestRecordEasy9: Int? = 80
-    @State static var bestRecordNormal9: Int? = 0
-    @State static var bestRecordHard9: Int? = 80
-    @State static var bestRecordEasy6: Int? = 80
-    @State static var bestRecordNormal6: Int? = 80
-    @State static var bestRecordHard6: Int? = 0
+    static let bestRecordEasy: Int? = 80
+    static let bestRecordNormal: Int? = 0
+    static let bestRecordHard: Int? = 80
     static var previews: some View {
-        RecordView(type: $type, bestRecordEasy9: $bestRecordEasy9, bestRecordNormal9: $bestRecordNormal9, bestRecordHard9: $bestRecordHard9, bestRecordEasy6: $bestRecordEasy6, bestRecordNormal6: $bestRecordNormal6, bestRecordHard6: $bestRecordHard6).background(Color(hex: "3d5a80"))
+        RecordView(type: .nineNine, bestRecordEasy: bestRecordEasy, bestRecordNormal: bestRecordNormal, bestRecordHard: bestRecordHard).background(Color(hex: "3d5a80"))
     }
 }
